@@ -97,6 +97,17 @@ func (i *ItemBehaviour) Tick(e *Ent, tx *world.Tx) *Movement {
 	return i.passive.Tick(e, tx)
 }
 
+// Explode reacts to explosions. The item entity is destroyed, unless the item
+// type is blast proof.
+func (i *ItemBehaviour) Explode(e *Ent, src mgl64.Vec3, impact float64, conf block.ExplosionConfig) {
+	if impact > 0 {
+		if expl, ok := i.Item().Item().(interface{ BlastProof() bool }); ok && expl.BlastProof() {
+			return
+		}
+		_ = e.Close()
+	}
+}
+
 // tick checks if the item can be picked up or merged with nearby item stacks.
 func (i *ItemBehaviour) tick(e *Ent, tx *world.Tx) {
 	if i.pickupDelay == 0 {
