@@ -4,6 +4,7 @@ import (
 	"math"
 	"time"
 
+	"github.com/df-mc/dragonfly/server/block/cube"
 	"github.com/df-mc/dragonfly/server/entity"
 	"github.com/df-mc/dragonfly/server/entity/effect"
 	"github.com/df-mc/dragonfly/server/internal/nbtconv"
@@ -58,6 +59,9 @@ func (s *Session) addSpecificMetadata(e any, m protocol.EntityMetadata) {
 	if gl, ok := e.(glider); ok && gl.Gliding() {
 		m.SetFlag(protocol.EntityDataKeyFlags, protocol.EntityDataFlagGliding)
 	}
+	if bb, ok := e.(baby); ok && bb.Baby() {
+		m.SetFlag(protocol.EntityDataKeyFlags, protocol.EntityDataFlagBaby)
+	}
 	if b, ok := e.(breather); ok {
 		m[protocol.EntityDataKeyAirSupply] = int16(b.AirSupply().Milliseconds() / 50)
 		m[protocol.EntityDataKeyAirSupplyMax] = int16(b.MaxAirSupply().Milliseconds() / 50)
@@ -111,6 +115,14 @@ func (s *Session) addSpecificMetadata(e any, m protocol.EntityMetadata) {
 	}
 	if sc, ok := e.(scoreTag); ok {
 		m[protocol.EntityDataKeyScore] = sc.ScoreTag()
+	}
+	if sl, ok := e.(sleeper); ok {
+		if pos, ok := sl.Sleeping(); ok {
+			m[protocol.EntityDataKeyBedPosition] = protocol.BlockPos{int32(pos[0]), int32(pos[1]), int32(pos[2])}
+
+			// For some reason there is no such flag in gophertunnel.
+			m.SetFlag(protocol.EntityDataKeyPlayerFlags, 1)
+		}
 	}
 	if c, ok := e.(areaEffectCloud); ok {
 		m[protocol.EntityDataKeyDataRadius] = float32(c.Radius())
@@ -189,6 +201,10 @@ type glider interface {
 	Gliding() bool
 }
 
+type baby interface {
+	Baby() bool
+}
+
 type breather interface {
 	Breathing() bool
 	AirSupply() time.Duration
@@ -259,6 +275,10 @@ type firework interface {
 
 type gameMode interface {
 	GameMode() world.GameMode
+}
+
+type sleeper interface {
+	Sleeping() (cube.Pos, bool)
 }
 
 type tnt interface {
