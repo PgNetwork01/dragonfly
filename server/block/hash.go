@@ -244,10 +244,6 @@ func (a Azalea) Hash() (uint64, uint64) {
 	return hashAzalea, uint64(boolByte(a.Flowering))
 }
 
-func (l AzaleaLeaves) Hash() (uint64, uint64) {
-	return hashAzaleaLeaves, uint64(boolByte(l.Flowering)) | uint64(boolByte(l.Persistent))<<1 | uint64(boolByte(l.ShouldUpdate))<<2
-}
-
 func (b Banner) Hash() (uint64, uint64) {
 	return hashBanner, uint64(b.Attach.Uint8())
 }
@@ -657,7 +653,7 @@ func (l Lava) Hash() (uint64, uint64) {
 }
 
 func (l Leaves) Hash() (uint64, uint64) {
-	return hashLeaves, uint64(l.Wood.Uint8()) | uint64(boolByte(l.Persistent))<<4 | uint64(boolByte(l.ShouldUpdate))<<5
+	return hashLeaves, uint64(l.Type.Uint8()) | uint64(boolByte(l.Persistent))<<4 | uint64(boolByte(l.ShouldUpdate))<<5
 }
 
 func (l Lectern) Hash() (uint64, uint64) {

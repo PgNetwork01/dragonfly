@@ -150,6 +150,7 @@ type Data struct {
 	TNTExplosionDropDecay          bool           `nbt:"tntexplosiondropdecay"`
 	HasUncompleteWorldFileOnDisk   bool           `nbt:"HasUncompleteWorldFileOnDisk"`
 	PlayerHasDied                  bool           `nbt:"PlayerHasDied"`
+	UseAllowList                   bool           `nbt:"UseAllowList"`
 }
 
 // FillDefault fills out d with all the default level.dat values.

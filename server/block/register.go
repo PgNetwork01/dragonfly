@@ -130,7 +130,6 @@ func init() {
 
 	registerAll(allAnvils())
 	registerAll(allAzalea())
-	registerAll(allAzaleaLeaves())
 	registerAll(allBanners())
 	registerAll(allBarrels())
 	registerAll(allBasalt())
@@ -242,8 +241,6 @@ func init() {
 	world.RegisterItem(Andesite{})
 	world.RegisterItem(Azalea{})
 	world.RegisterItem(Azalea{Flowering: true})
-	world.RegisterItem(AzaleaLeaves{})
-	world.RegisterItem(AzaleaLeaves{Flowering: true})
 	world.RegisterItem(Barrel{})
 	world.RegisterItem(Barrier{})
 	world.RegisterItem(Basalt{Polished: true})
@@ -435,7 +432,8 @@ func init() {
 	}
 	for _, w := range WoodTypes() {
 		if w != WarpedWood() && w != CrimsonWood() {
-			world.RegisterItem(Leaves{Wood: w, Persistent: true})
+			t, _ := w.Leaves()
+			world.RegisterItem(Leaves{Type: t, Persistent: true})
 		}
 		world.RegisterItem(Log{Wood: w, Stripped: true})
 		world.RegisterItem(Log{Wood: w})
@@ -449,6 +447,8 @@ func init() {
 		world.RegisterItem(Wood{Wood: w})
 		world.RegisterItem(Sapling{Wood: w})
 	}
+	world.RegisterItem(Leaves{Type: AzaleaLeaves(), Persistent: true})
+	world.RegisterItem(Leaves{Type: FloweringAzaleaLeaves(), Persistent: true})
 	for _, ore := range OreTypes() {
 		world.RegisterItem(CoalOre{Type: ore})
 		world.RegisterItem(CopperOre{Type: ore})
