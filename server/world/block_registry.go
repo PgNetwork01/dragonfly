@@ -183,7 +183,7 @@ func (br *BlockRegistryImpl) RegisterBlockState(s BlockState) {
 	}
 	h := stateHash{name: s.Name, properties: hashProperties(s.Properties)}
 	if _, ok := br.stateRuntimeIDs[h]; ok {
-		return
+		continue
 	}
 	if _, ok := br.blockProperties[s.Name]; !ok {
 		br.blockProperties[s.Name] = s.Properties
