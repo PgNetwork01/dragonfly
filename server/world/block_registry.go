@@ -183,7 +183,7 @@ func (br *BlockRegistryImpl) RegisterBlockState(s BlockState) {
 	}
 	h := stateHash{name: s.Name, properties: hashProperties(s.Properties)}
 	if _, ok := br.stateRuntimeIDs[h]; ok {
-		panic(fmt.Sprintf("cannot register the same state twice (%+v)", s))
+		return
 	}
 	if _, ok := br.blockProperties[s.Name]; !ok {
 		br.blockProperties[s.Name] = s.Properties
@@ -229,7 +229,7 @@ func (br *BlockRegistryImpl) Finalize() {
 			br.airRID = rid
 		}
 		if _, ok := br.stateRuntimeIDs[h]; ok {
-			panic(fmt.Sprintf("cannot register the same state twice (%s %+v)", name, properties))
+			return
 		}
 		br.stateRuntimeIDs[h] = rid
 
